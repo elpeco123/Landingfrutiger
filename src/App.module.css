@@ -1,0 +1,121 @@
+/* ---------- Escritorio ---------- */
+.app {
+  min-height: 100vh;
+  padding: calc(var(--chrome-top) + 20px) 20px calc(var(--chrome-bottom) + 24px);
+}
+
+.desktop {
+  display: grid;
+  grid-template-areas: 'contacts feed side';
+  grid-template-columns: minmax(240px, 290px) minmax(0, 1fr) minmax(270px, 340px);
+  gap: 20px;
+  align-items: start;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.contacts {
+  grid-area: contacts;
+}
+
+.feed {
+  grid-area: feed;
+}
+
+.side {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  grid-area: side;
+  min-width: 0;
+}
+
+/* Tablet: feed a la izquierda, contactos + perfil/gadgets a la derecha */
+@media (max-width: 1099px) {
+  .desktop {
+    grid-template-areas:
+      'feed contacts'
+      'feed side';
+    grid-template-columns: minmax(0, 1fr) minmax(260px, 320px);
+  }
+}
+
+/* Mobile: una sola columna con pestañas */
+@media (max-width: 767px) {
+  .app {
+    padding-inline: 12px;
+  }
+
+  .desktop {
+    grid-template-areas: none;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 16px;
+  }
+
+  .contacts,
+  .feed,
+  .side {
+    grid-area: auto;
+  }
+
+  .desktop [data-active='false'] {
+    display: none;
+  }
+}
+
+/* ---------- Navegación inferior (solo mobile) ---------- */
+.bottomNav {
+  display: none;
+}
+
+@media (max-width: 767px) {
+  .bottomNav {
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 30;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    height: var(--chrome-bottom);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+    border-top: 1px solid rgba(255, 255, 255, 0.4);
+    background: linear-gradient(180deg, rgba(40, 75, 110, 0.7), rgba(8, 24, 45, 0.88));
+    -webkit-backdrop-filter: var(--blur);
+    backdrop-filter: var(--blur);
+  }
+}
+
+.navBtn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  min-height: 44px;
+  border: 0;
+  background: transparent;
+  color: #e8f6ff;
+  font-size: 0.75rem;
+}
+
+.navBtn svg {
+  width: 24px;
+  height: 24px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.navBtn[aria-current='page'] {
+  color: #fff;
+  font-weight: 600;
+  background: radial-gradient(ellipse at 50% 100%, rgba(39, 193, 214, 0.6), transparent 70%);
+}
+
+.navBtn:focus-visible {
+  outline-color: #fff;
+  outline-offset: -4px;
+}

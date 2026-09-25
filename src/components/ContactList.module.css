@@ -1,0 +1,148 @@
+.me {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 8px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(10, 80, 130, 0.15);
+}
+
+.meInfo {
+  flex: 1;
+  min-width: 0;
+}
+
+.meName {
+  margin: 0 0 4px;
+  font-size: 1.05rem;
+  font-weight: 600;
+}
+
+.pm {
+  display: block;
+  overflow: hidden;
+  font-size: 0.85rem;
+  font-style: italic;
+  color: var(--ink-soft);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.meInfo .pm {
+  margin: 6px 0 0;
+}
+
+.group {
+  margin-top: 6px;
+}
+
+.groupTitle {
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+.groupTitle button {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  min-height: 36px;
+  padding: 0 4px;
+  border: 0;
+  border-radius: 4px;
+  background: transparent;
+  color: var(--aqua-deep);
+  font-weight: 600;
+  text-align: left;
+}
+
+.caret {
+  display: inline-block;
+  transition: transform 0.15s;
+}
+
+.groupTitle button[aria-expanded='true'] .caret {
+  transform: rotate(90deg);
+}
+
+.list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.contact {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px;
+  border: 1px solid transparent;
+  border-radius: 6px;
+}
+
+.contact:hover {
+  border-color: #9fd3f0;
+  background: linear-gradient(#f4fbff, #d9f0fd);
+}
+
+.info {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-width: 0;
+  line-height: 1.3;
+}
+
+.name {
+  font-weight: 600;
+}
+
+.status {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.8rem;
+  color: var(--ink-soft);
+}
+
+/* Botón de zumbido: esfera glossy */
+.buzz {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 1px solid #9a7400;
+  border-radius: 50%;
+  background: radial-gradient(circle at 50% 30%, #fff7c2 0%, #ffd43b 45%, #e8a200 100%);
+  color: #5a3d00;
+  box-shadow:
+    inset 0 1px 0 #fff,
+    0 2px 4px rgba(0, 40, 80, 0.25);
+  transition:
+    box-shadow 0.15s,
+    transform 0.15s;
+}
+
+.buzz:hover {
+  box-shadow:
+    inset 0 1px 0 #fff,
+    0 0 12px rgba(255, 200, 40, 0.9);
+}
+
+.buzz:active {
+  transform: scale(0.94);
+}
+
+.buzz svg {
+  width: 20px;
+  height: 20px;
+  fill: currentColor;
+}
+
+@media (pointer: coarse) {
+  .groupTitle button {
+    min-height: 44px;
+  }
+}

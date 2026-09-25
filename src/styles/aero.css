@@ -1,0 +1,283 @@
+/* ==========================================================================
+   Pecows · Paleta y utilidades globales "Aero"
+   Variables de color, vidrio, brillos y sombras + botones píldora y campos.
+   Lo específico de cada componente vive en su CSS Module.
+   ========================================================================== */
+
+:root {
+  /* Tipografía estilo Segoe UI, sin fuentes externas */
+  --font-ui: 'Segoe UI', 'Segoe UI Variable Text', Frutiger, 'Frutiger Linotype', 'Myriad Pro', Tahoma,
+    'Helvetica Neue', Arial, sans-serif;
+
+  /* Cielo y pasto */
+  --sky-top: #0b3fc9;
+  --sky-mid: #2f86ec;
+  --sky-bottom: #9fd4ff;
+  --grass-light: #a8ec6c;
+  --grass: #5fcf2a;
+  --grass-deep: #2c9412;
+
+  /* Acentos agua */
+  --aqua: #27c1d6;
+  --aqua-deep: #0a6e9e;
+  --aqua-light: #bff3fa;
+
+  /* Texto: --ink ≥ 7:1 y --ink-soft ≥ 4.5:1 sobre el vidrio */
+  --ink: #0b2545;
+  --ink-soft: #3a5a7a;
+
+  /* Vidrio Aero */
+  --glass-bg: rgba(255, 255, 255, 0.62);
+  --glass-bg-strong: rgba(255, 255, 255, 0.85);
+  --glass-border-outer: rgba(20, 70, 120, 0.45);
+  --glass-border-inner: rgba(255, 255, 255, 0.75);
+  --blur: blur(18px) saturate(160%);
+  --gloss: linear-gradient(180deg, rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.1));
+
+  /* Sombras difusas */
+  --shadow-window: 0 10px 30px rgba(0, 40, 80, 0.28), 0 2px 6px rgba(0, 40, 80, 0.18);
+  --shadow-soft: 0 4px 14px rgba(0, 40, 80, 0.18);
+  --glow: 0 0 12px rgba(39, 193, 214, 0.65);
+
+  /* Estados de Messenger */
+  --status-online: #3cc43c;
+  --status-away: #f2b705;
+  --status-busy: #e0342b;
+  --status-offline: #9aa5b1;
+
+  /* Botón cerrar */
+  --close-gradient: linear-gradient(180deg, #f5a79f 0%, #e0564b 49%, #c42b1f 50%, #d9352b 100%);
+
+  --radius-window: 10px;
+  --radius-pill: 999px;
+  --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+
+  /* Cromo fijo: barra de tareas (abajo en escritorio, arriba en mobile) y nav inferior */
+  --taskbar-h: 48px;
+  --nav-h: 64px;
+  --chrome-top: 0px;
+  --chrome-bottom: var(--taskbar-h);
+}
+
+@media (max-width: 767px) {
+  :root {
+    --chrome-top: var(--taskbar-h);
+    --chrome-bottom: calc(var(--nav-h) + env(safe-area-inset-bottom, 0px));
+  }
+}
+
+/* Sin backdrop-filter el vidrio se vuelve casi opaco para no perder contraste */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  :root {
+    --glass-bg: rgba(255, 255, 255, 0.9);
+  }
+}
+
+@media (prefers-contrast: more) {
+  :root {
+    --glass-bg: rgba(255, 255, 255, 0.94);
+    --ink-soft: #1f3b57;
+  }
+}
+
+/* ---------- Base ---------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: var(--font-ui);
+  font-size: 1rem;
+  line-height: 1.5;
+  color: var(--ink);
+  background: var(--sky-mid);
+  -webkit-font-smoothing: antialiased;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: not-allowed;
+}
+
+/* Foco visible y consistente en toda la app */
+:focus-visible {
+  outline: 3px solid var(--ink);
+  outline-offset: 2px;
+}
+
+section[id] {
+  scroll-margin-top: calc(var(--chrome-top) + 16px);
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.skip-link {
+  position: fixed;
+  top: -80px;
+  left: 12px;
+  z-index: 100;
+  padding: 10px 16px;
+  border-radius: 6px;
+  background: #fff;
+  color: var(--ink);
+  font-weight: 600;
+  box-shadow: var(--shadow-soft);
+}
+
+.skip-link:focus {
+  top: calc(var(--chrome-top) + 12px);
+}
+
+/* ---------- Botón píldora con brillo ---------- */
+.btn-pill {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 44px;
+  padding: 0 22px;
+  border: 1px solid #0a5f86;
+  border-radius: var(--radius-pill);
+  background: linear-gradient(180deg, #8ae6f2 0%, #3fcbe0 49%, #14a9c9 50%, #2cc0dc 100%);
+  color: #04263b;
+  font-weight: 600;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.55);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.9),
+    inset 0 -2px 6px rgba(0, 80, 120, 0.25),
+    0 2px 6px rgba(0, 60, 100, 0.3);
+  transition:
+    filter 0.15s,
+    transform 0.15s,
+    box-shadow 0.2s;
+}
+
+/* Reflejo en la mitad superior */
+.btn-pill::before {
+  content: '';
+  position: absolute;
+  inset: 1px 8px 50% 8px;
+  border-radius: var(--radius-pill) var(--radius-pill) 40% 40%;
+  background: var(--gloss);
+  opacity: 0.8;
+  pointer-events: none;
+}
+
+.btn-pill:hover:not(:disabled) {
+  filter: brightness(1.06) saturate(1.1);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.9),
+    inset 0 -2px 6px rgba(0, 80, 120, 0.25),
+    0 2px 6px rgba(0, 60, 100, 0.3),
+    var(--glow);
+}
+
+.btn-pill:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+.btn-pill:disabled {
+  filter: grayscale(0.85);
+  opacity: 0.6;
+}
+
+.btn-secondary {
+  border-color: #7c96ad;
+  background: linear-gradient(180deg, #ffffff 0%, #eef4f9 49%, #dbe6ef 50%, #e9f0f6 100%);
+}
+
+.btn-small {
+  min-height: 34px;
+  padding: 0 14px;
+  font-size: 0.9rem;
+}
+
+.btn-large {
+  min-height: 48px;
+  padding: 0 36px;
+  font-size: 1.05rem;
+}
+
+/* ---------- Campos de texto ---------- */
+.aero-input {
+  width: 100%;
+  min-height: 40px;
+  padding: 8px 12px;
+  border: 1px solid #8fb2cc;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: inset 0 1px 3px rgba(0, 40, 80, 0.15);
+  transition:
+    border-color 0.15s,
+    box-shadow 0.15s;
+}
+
+.aero-input:hover {
+  border-color: var(--aqua-deep);
+}
+
+.aero-input:focus-visible {
+  outline: 2px solid var(--aqua-deep);
+  outline-offset: 0;
+  box-shadow:
+    inset 0 1px 3px rgba(0, 40, 80, 0.15),
+    0 0 0 4px rgba(39, 193, 214, 0.35);
+}
+
+.aero-input::placeholder {
+  color: #587390;
+}
+
+/* ---------- Emoticones en línea ---------- */
+.emoticon {
+  display: inline-block;
+  vertical-align: -0.3em;
+  margin: 0 1px;
+}
+
+/* Pantallas táctiles: todo lo clickeable llega a 44px */
+@media (pointer: coarse) {
+  .btn-small,
+  .aero-input {
+    min-height: 44px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

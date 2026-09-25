@@ -1,0 +1,188 @@
+.screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  min-height: 100vh;
+  padding: 24px 16px 150px;
+}
+
+/* Logo + ventana. En pantallas anchas va a la derecha para dejar ver la escena. */
+.panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  width: min(560px, 100%);
+}
+
+@media (min-width: 1100px) {
+  .screen {
+    align-items: flex-end;
+    padding-right: max(48px, 7vw);
+  }
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.brand svg {
+  filter: drop-shadow(0 4px 10px rgba(0, 50, 100, 0.35));
+}
+
+.logo {
+  margin: 0;
+  font-size: clamp(2.4rem, 7vw, 3.6rem);
+  font-weight: 300;
+  line-height: 1.05;
+  letter-spacing: -0.01em;
+  color: #fff;
+  text-shadow:
+    0 2px 6px rgba(0, 40, 110, 0.75),
+    0 0 18px rgba(0, 60, 160, 0.55);
+}
+
+.tagline {
+  margin: 0;
+  font-size: 1.05rem;
+  color: #fff;
+  text-shadow:
+    0 1px 3px rgba(0, 30, 90, 0.95),
+    0 0 14px rgba(0, 50, 140, 0.7);
+}
+
+.window {
+  width: 100%;
+}
+
+.users {
+  margin: 0 0 16px;
+  padding: 0;
+  border: 0;
+}
+
+.legend {
+  margin-bottom: 10px;
+  padding: 0;
+  font-weight: 600;
+}
+
+.userGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+
+.userTile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 12px 6px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  cursor: pointer;
+  transition:
+    background 0.15s,
+    border-color 0.15s,
+    box-shadow 0.15s;
+}
+
+.userTile:hover {
+  border-color: rgba(10, 110, 158, 0.35);
+  background: rgba(255, 255, 255, 0.55);
+}
+
+.userTile:has(input:checked) {
+  border-color: var(--aqua-deep);
+  background: linear-gradient(#f2fbff, #cfeefe);
+  box-shadow:
+    inset 0 0 0 1px #fff,
+    var(--glow);
+}
+
+.userTile:has(input:focus-visible) {
+  outline: 3px solid var(--ink);
+  outline-offset: 2px;
+}
+
+.userName {
+  font-weight: 600;
+}
+
+.field {
+  margin-bottom: 12px;
+}
+
+.note {
+  margin: 0 0 16px;
+  font-size: 0.85rem;
+  color: var(--ink-soft);
+}
+
+.submitRow {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 0;
+}
+
+.loading p {
+  margin: 0;
+}
+
+/* Barra de carga de época: un bloque verde brillante que recorre la barra */
+.bar {
+  position: relative;
+  width: min(320px, 100%);
+  height: 16px;
+  overflow: hidden;
+  border: 1px solid #6f8ea8;
+  border-radius: 4px;
+  background: linear-gradient(#e9eef2, #fdfdfd);
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.15);
+}
+
+.bar span {
+  position: absolute;
+  top: 1px;
+  bottom: 1px;
+  left: 0;
+  width: 35%;
+  border-radius: 3px;
+  background: linear-gradient(180deg, #c4f7a8 0%, #6fd33f 49%, #45b21a 50%, #7cdc50 100%);
+  box-shadow: 0 0 6px rgba(80, 200, 40, 0.6);
+  animation: slide 1.1s linear infinite;
+}
+
+@keyframes slide {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(290%);
+  }
+}
+
+@media (max-width: 480px) {
+  .userGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bar span {
+    width: 100%;
+    animation: none;
+  }
+}
