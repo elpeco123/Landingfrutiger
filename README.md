@@ -1,7 +1,7 @@
 # Pecows
 
 Red social pequeña y **ficticia** con estética **Frutiger Aero / Aero Glass / mensajero de 2007**.
-Proyecto de portfolio en un entorno cerrado: no tiene backend ni registro real, y todo el arte es CSS/SVG original (sin logos ni íconos de marcas reales).
+Proyecto de portfolio en un entorno cerrado: no tiene backend ni registro real. La interfaz es CSS/SVG original y el fondo es un collage con fotos de licencia libre (ver [Créditos de imágenes](#créditos-de-imágenes)), sin logos ni íconos de marcas reales.
 
 > "Abrir la PC en 2007": ventanas de vidrio, cielos celestes, burbujas y optimismo tecnológico.
 
@@ -46,20 +46,21 @@ src/
 │   ├── useNow.js            # reloj que se actualiza
 │   └── useDismiss.js        # cerrar popovers con clic afuera / Escape
 ├── data/mockData.js         # usuarios, posts y comentarios de prueba
+├── assets/scene/            # fotos recortadas y optimizadas en WebP (~700 KB en total)
 └── components/
     ├── AeroWindow           # ventana reutilizable (minimizar, maximizar, cerrar, zumbido)
     ├── AeroSelect           # desplegable glossy accesible (reemplaza al <select> nativo)
     ├── LoginScreen, Taskbar, ContactList, Feed, PostCard, PostComposer,
     ├── EmoticonPicker, Profile, Gadgets, Toast
-    ├── Scenery              # fondo SVG: cielo, sol, globo de vidrio, ciudad, lomas, árboles, burbujas
-    ├── SceneryParts         # peces, monitor LCD, CD, MP3 y tira de fotos
+    ├── Scenery              # fondo: foto base, cielo, sol, nubes, globo de vidrio, ciudad y árbol (fotos)
+    ├── SceneryParts         # monitor, CD, MP3, peces (fotos recortadas), agua y tira de película
     ├── Avatar               # personaje glossy SVG con color elegible + marco de estado + StatusDot
     └── Emoticon             # emoticones SVG + renderWithEmoticons()
 ```
 
 ## Decisiones de diseño
 
-- **Fondo**: una escena Frutiger Aero en SVG. Tiene cielo azul intenso con arcos de luz, sol radiante y reflejos de lente, nubes esponjosas y un globo de vidrio gigante. Debajo, una ciudad costera de cristal que se refleja en el lago, lomas glossy y árboles con copa de "burbujas". Suma detalles tecnológicos de los 2000: una tira de fotos que se aleja hacia la ciudad, un CD iridiscente con nota musical, un reproductor MP3 dentro de una burbuja y un monitor LCD del que salta un pez. Abajo hay agua con peces tropicales, burbujas y destellos. Las piezas detalladas viven en `SceneryParts.jsx`.
+- **Fondo fotográfico estilo collage**, como los wallpapers de la época. La base es la foto de un árbol solitario sobre pasto y cielo azul, espejada, con color más vivo y un tinte de cielo azul profundo. Detrás del árbol hay una ciudad de vidrio real con el cielo quitado. El árbol está recortado de la misma foto y se dibuja encima en la misma posición, así la ciudad queda por detrás. Los peces, el monitor LCD (sin su logo), el CD y el MP3 son fotos recortadas. Encima van detalles Frutiger Aero en SVG: sol con rayos, nubes, globo de vidrio, agua con haces de luz, salpicadura, burbujas iridiscentes y destellos.
 - **Avatares**: un personaje glossy (cabeza esférica y cuerpo) generado a partir de un solo color. Las luces y sombras salen de ese tono en HSL, y el cuerpo vira ~45° de tono hacia abajo, como el vidrio aqua→verde de la época.
 - **Paleta** (en `src/styles/aero.css`): cielo `#0B3FC9 → #9FD4FF`, agua `#27C1D6`/`#0A6E9E`, pasto `#5FCF2A`, y texto `#0B2545` (≥ 7:1 sobre el vidrio).
 - **Vidrio con contraste**: las ventanas usan `rgba(255,255,255,.62)` con `backdrop-filter: blur(18px)`. Si el navegador no soporta blur, o si el usuario pide más contraste (`prefers-contrast: more`), el vidrio se vuelve casi opaco.
@@ -67,8 +68,8 @@ src/
 - **Tipografía**: pila Segoe UI → Frutiger → Myriad → Tahoma → Arial. No se descargan fuentes.
 - **Estados**: además del color, cada punto de estado tiene su forma (reloj para Ausente, guion para Ocupado, círculo vacío para Desconectado) y siempre va con texto.
 - **Desplegables propios** (`AeroSelect`): botón de vidrio con flecha en una esfera aqua y lista translúcida. Siguen el patrón *listbox*: flechas, Inicio/Fin, Enter/Espacio para elegir y Escape para cerrar devolviendo el foco.
-- **Volumen 3D y realismo**: sombras proyectadas (`feDropShadow`), degradados de muchas paradas y un sombreado esférico reutilizable (`#volume`). Las texturas son procedurales (`feTurbulence` + `feDisplacementMap` + `feDiffuseLighting`): follaje con bordes de hojas y relieve, corteza, pasto, nubes esponjosas y el reflejo ondulado del lago. Los edificios tienen cara lateral en sombra, techo en perspectiva, reflejos diagonales en el vidrio, oscurecimiento en la base, luces de aviso en las antenas y neblina en la fila de atrás.
-- **Rendimiento del fondo**: la escena está en dos `<svg>` superpuestos. Uno es estático, con los filtros pesados, que el navegador calcula una sola vez. El otro es liviano y tiene todo lo animado (peces, burbujas, destellos), así las animaciones no obligan a recalcular las texturas.
+- **Volumen y sombras**: los objetos fotográficos proyectan sombra (`feDropShadow`). Las nubes usan ruido (`feTurbulence` + `feDisplacementMap`) para verse esponjosas.
+- **Rendimiento del fondo**: la escena está en dos `<svg>` superpuestos. Uno es estático (fotos, nubes y globo) y el navegador lo calcula una sola vez. El otro es liviano y tiene todo lo animado (peces, burbujas, destellos). Las imágenes son WebP optimizadas y Vite las incluye con hash.
 - **Emoticones como SVG** y no como emojis del sistema: se ven igual en todos los sistemas operativos y tienen nombre accesible.
 - **Accesibilidad**: foco visible en todo, áreas táctiles de 44px en pantallas táctiles, `aria-live` en los toasts, `aria-pressed`/`aria-expanded` en los botones de estado y un link para saltar al contenido. Con `prefers-reduced-motion` las burbujas y nubes quedan quietas, la barra de carga es fija y el zumbido pasa a ser un destello en lugar de una sacudida.
 - **Responsive**: 3 columnas (≥ 1100px), 2 columnas (768–1099px) y 1 columna con navegación inferior (< 768px). La barra de tareas va abajo en escritorio y arriba en mobile.
@@ -76,6 +77,23 @@ src/
 ### Dependencias
 
 Solo `react` y `react-dom`, más `vite` y `@vitejs/plugin-react` como herramientas de desarrollo. El plugin es el oficial de la plantilla React de Vite: activa JSX automático y Fast Refresh. No hay librerías de UI, íconos ni estado.
+
+## Créditos de imágenes
+
+Fotos recortadas, espejadas o con ajuste de color para este proyecto:
+
+| Uso | Archivo original | Autor | Licencia |
+|-----|------------------|-------|----------|
+| Fondo (pasto y cielo) y árbol | [Pangetkon, Shan Hills, Myanmar, Single tree in the field](https://commons.wikimedia.org/wiki/File:Pangetkon,_Shan_Hills,_Myanmar,_Single_tree_in_the_field,_blue_sky,_landscape_in_remote_Myanmar.jpg) | Vyacheslav Argenberg | [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
+| Ciudad | [Skyline Frankfurt am Main 2019](https://commons.wikimedia.org/wiki/File:Skyline_Frankfurt_am_Main_2019.jpg) | Marco Almbauer | CC0 |
+| Pez payaso | [Common clownfish](https://commons.wikimedia.org/wiki/File:Common_clownfish.jpg) | Janderk | Dominio público |
+| Pez cirujano azul | [Paracanthurus hepatus 244215093](https://commons.wikimedia.org/wiki/File:Paracanthurus_hepatus_244215093.jpg) | Jean-Paul Boerekamps | CC0 |
+| Pez cirujano amarillo | [Gelbe Segelflossendoktor Zebrasoma flavescens](https://commons.wikimedia.org/wiki/File:Gelbe_Segelflossendoktor_Zebrasoma_flavescens.jpg) | Holger Krisp | [CC BY 3.0](https://creativecommons.org/licenses/by/3.0/) |
+| Monitor LCD (logo borrado) | [Pixabay 5050543](https://pixabay.com/photos/black-blank-computer-desktop-5050543/) | Pixabay | [Licencia de contenido de Pixabay](https://pixabay.com/service/license-summary/) |
+| CD | [Pixabay 315546](https://pixabay.com/photos/bytes-cd-rom-colorful-compact-copy-315546/) | Pixabay | Licencia de contenido de Pixabay |
+| Reproductor MP3 y auriculares | [Pixabay 2737023](https://pixabay.com/photos/headphones-in-ear-mp3-music-audio-2737023/) | Pixabay | Licencia de contenido de Pixabay |
+
+Los recortes se hicieron con [rembg](https://github.com/danielgatis/rembg) y máscaras por color (Python + Pillow).
 
 ## Cómo extenderlo
 
